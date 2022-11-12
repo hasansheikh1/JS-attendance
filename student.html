@@ -21,10 +21,10 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Home</a>
+                <a class="nav-link active" aria-current="page" href="index.html">Create Class</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
+                <a class="nav-link" href="attendance.html">Attendance</a>
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -51,7 +51,177 @@
       	    <!-- Nav bar ends -->
 
 
+              <div class="my-info-div1 " >
+                <form class=" g-3 d-flex flex-column needs-validation  align-items-center form1" id="class-creation" novalidate>
+                  <h1>Student Registration Form</h1>
+                  <hr style="height:2px; width:50%; border-width:0; color:red; background-color:rgb(114, 105, 105)">
+                  <div class="col-md-4">
+                    <label for="validationCustom01" class="form-label">Name:</label>
+                    <input type="text" maxlength="12" class="form-control" id="validationCustom01" required>
+                    <div class="valid-feedback">
+                      Looks good!
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <label for="validationCustom02" class="form-label">Father Name:</label>
+                    <input type="text" class="form-control" id="validationCustom02" required>
+                    <div class="valid-feedback">
+                      Looks good!
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <label for="validationCustomUsername" class="form-label">Roll No:</label>
+                    <div class="input-group has-validation">
+                      <input type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" required>
+                      <div class="invalid-feedback">
+                        Please choose a username.
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="validationCustom03" class="form-label">Contact:</label>
+                    <input type="text" class="form-control" id="validationCustom03" required>
+                    <div class="invalid-feedback">
+                      Not Available
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <label for="validationCustom04" class="form-label">Course Name:</label>
+                    <select class="form-select" id="validationCustom04" required>
+                      <option selected disabled value="">Choose...</option>
+                      <option>Web & Mobile hybrid</option>
+                      <option>CCNA</option>
+                      <option>CCO</option>
+                      <option>Ai Chatbot</option>
+                      <option>Cloud Computing</option>
+                    </select>
+                    <div class="invalid-feedback">
+                      Please select a valid state.
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <label for="validationCustom05" class="form-label">CNIC:</label>
+                    <input type="text" class="form-control" id="validationCustom05" required>
+                    <div class="invalid-feedback">
+                      Please provide a valid Batch.
+                    </div>
+                  </div>
+                 
+                 
+                  <div class="col-12 text-center">
+                    <button class=" my-2 btn btn-primary" id="createClass" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Record</button>
+                    <button class=" my-2 btn btn-success" id="readClass" >Read</button>
+                  </div>
+              </form>
+              </div>
 
+
+
+              <script type="module">
+                // Import the functions you need from the SDKs you need
+                import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+                import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-analytics.js";
+                // import { getDatabase, ref, child, get, set } from " firebase/database";
+            
+              
+                // Your web app's Firebase configuration
+                // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+                const firebaseConfig = {
+                  apiKey: "AIzaSyApeubg1rPtMCauTcqAHMHyH9eZ0tThBW4",
+                  authDomain: "atd-systemjs.firebaseapp.com",
+                  projectId: "atd-systemjs",
+                  storageBucket: "atd-systemjs.appspot.com",
+                  messagingSenderId: "1091598532997",
+                  appId: "1:1091598532997:web:d9955dbd5a2e1828ee84ec",
+                  measurementId: "G-D3JY21V64M"
+                };
+              
+                // Initialize Firebase
+                const app = initializeApp(firebaseConfig);
+                // const analytics = getAnalytics(app);
+                import {set,update,remove,getDatabase, ref, child, get} from 
+                "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
+                
+                const db=getDatabase();
+              
+        
+                let readCl=document.getElementById("readClass");
+                let addClass=document.getElementById("createClass");
+                let timings = document.getElementById("validationCustom01");
+                let schedule = document.getElementById("validationCustom02");
+                let teacher = document.getElementById("validationCustomUsername");
+                let section = document.getElementById("validationCustom03");
+                let crsName = document.getElementById("validationCustom04");
+                let batchNo = document.getElementById("validationCustom05");
+                let mod = document.getElementById("exampleModal");
+        
+        
+                function InsertData(){
+            
+               
+                    set(ref(db,"TheClass/"+section.value),{
+                        classTime:timings.value,
+                        classSchedule:schedule.value,
+                        classTeacher:teacher.value,
+                        classSection:section.value,
+                        courseNam:crsName.value,
+                        classbatch:batchNo.value
+                    })
+                    .then(()=>{
+        
+                            modal1();
+                            // alert("Class Created");
+                            
+                    })
+                    .catch((error)=>{
+                            alert("Unsuccessful"+error);
+                    });
+                   
+             
+                }
+        
+                addClass.addEventListener('click',(e)=>{
+                    e.preventDefault();
+                    InsertData();
+                   
+                }); 
+        
+                function modal1(){
+                    console.log("hello");
+                    mod.classList.add("modal");
+        
+                }
+        
+            //   read data
+            function SelectData(){
+                    const dbRef = ref(db);
+                      get(child(dbRef, "TheClass/"+ section.value)).then((snapshot) => {
+                      if (snapshot.exists()) {
+        
+                        let dat = snapshot.val();
+        
+        
+                       for(var key in dat){
+                        console.log(dat[key].classSchedule)
+                       }
+                        
+                        console.log(dat);
+        
+                      } else {
+                        console.log("No data available");
+                      }
+                    }).catch((error) => {
+                      console.error(error);
+                    });
+            }
+            //   read data end
+            readCl.addEventListener('click',(e)=>{
+                e.preventDefault();    
+                SelectData();
+                   
+                }); 
+        
+              </script>
 
               <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
               <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
